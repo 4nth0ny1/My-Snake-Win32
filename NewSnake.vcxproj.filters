@@ -21,6 +21,7 @@
     <None Include="docs\DocPages.md" />
     <None Include="docs\VisualStudiosCheatSheet.md" />
     <None Include="docs\WarningsPromotedErrors.md" />
+    <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.c">

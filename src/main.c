@@ -4,14 +4,15 @@
 #include <stdio.h>
 
 #include "timer.h"
+#include "win32_platform.h"
 
-
+static Backbuffer* g_backbuffer = NULL;
 static bool g_running = false;
 
 static LRESULT CALLBACK Win32WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 static void do_frame_work(HWND hwnd, float dt_seconds);
 
-int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR commandLine, int showCode) {
+int WINAPI WinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prevInstance, _In_ LPSTR commandLine, _In_ int showCode) {
     (void)prevInstance;
     (void)commandLine;
     (void)showCode;
@@ -36,6 +37,18 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR commandLine
         900, 700,
         0, 0, instance, 0
     );
+
+    RECT rc;
+    GetClientRect(hwnd, &rc);
+    int client_w = rc.right - rc.left;
+    int client_h = rc.bottom - rc.top;
+    
+    g_backbuffer = backbuffer_create(client_w, client_h);
+    if (!g_backbuffer) {
+        MessageBoxA(0, "backbuffer_create failed", "Error", MB_OK | MB_ICONERROR);
+        return 0;
+    }
+
 
     // Timing init (opaque type, but we can still allocate it by value)
     Win32Timer* timer = timer_create();
@@ -62,6 +75,8 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE prevInstance, LPSTR commandLine
         Sleep(1);
     }
     timer_destroy(timer);
+    backbuffer_destroy(g_backbuffer);
+    g_backbuffer = NULL;
     return 0;
 }
 
@@ -85,6 +100,22 @@ static LRESULT CALLBACK Win32WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPAR
 }
 
 static void do_frame_work(HWND hwnd, float dt_seconds) {
+
+    RECT rc;
+    GetClientRect(hwnd, &rc);
+
+    int client_w = rc.right - rc.left;
+    int client_h = rc.bottom - rc.top;
+
+    backbuffer_resize(g_backbuffer, client_w, client_h);
+
+    uint32_t clear_color = 0xFF202040;
+    backbuffer_clear(g_backbuffer, clear_color);
+
+    HDC dc = GetDC(hwnd);
+    backbuffer_present(dc, g_backbuffer, client_w, client_h);
+    ReleaseDC(hwnd, dc);
+
     static float title_timer = 0.0f;
     title_timer += dt_seconds;
 
