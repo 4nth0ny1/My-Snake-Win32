@@ -1,0 +1,79 @@
+############################################
+# OS / Editor noise
+############################################
+
+# Windows thumbnail cache
+Thumbs.db
+ehthumbs.db
+
+# VS Code
+.vscode/
+
+############################################
+# Visual Studio junk
+############################################
+
+# Visual Studio cache / user files
+.vs/
+*.user
+*.userosscache
+*.suo
+
+# Visual Studio build output
+x64/
+x86/
+Debug/
+Release/
+Binaries/
+Build/
+
+# MSVC intermediate files
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.ipch
+*.iobj
+*.pch
+*.tlog
+*.log
+
+# MSVC profiling / diagnostics
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+
+############################################
+# C / C++ artifacts
+############################################
+
+# Compiled binaries
+*.exe
+*.dll
+*.lib
+*.exp
+
+# Temporary / crash
+*.tmp
+*.bak
+*.old
+
+############################################
+# Optional: ignore local test assets
+############################################
+
+# Example:
+# assets/tmp/
+
+############################################
+# DO NOT IGNORE (explicit)
+############################################
+
+!*.sln
+!*.vcxproj
+!*.vcxproj.filters
+!*.md
+!include/
+!src/
+!docs/
